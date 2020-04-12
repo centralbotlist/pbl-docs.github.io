@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: Client.js</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="./build/entry.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                    
+                        <h1 class="navbar-item">Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="Client.html">Client</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Source</p>
+                        <h1>Client.js</h1>
+                    </header>
+                    
+                    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const axios = require('axios').default;
+const isObject = (obj) => !Array.isArray(obj) &amp;&amp; obj === Object(obj);
+/**
+ * @see https://pbl.glitch.me/api/docs
+ * @example &lt;caption>Preparing the client&lt;/caption>
+ * const pbl = require('pblapi.js');
+ * const PBL = new pbl.Client({ id: 'your bot id', key: 'your bot's pbl token })
+ * 
+ */
+class Client {
+	/**
+   * @constructor
+	 * @param {object} options An object with client options.
+	 * @param {string} options.id The ID of the bot.
+	 */
+	constructor(options) {
+		if (!isObject(options)) throw new TypeError('[PBLAPI.js] Options must be an object');
+		if(!options.id) throw new TypeError('[PBLAPI.js] The bot ID is missing');
+		if (typeof options.id !== 'string') throw new TypeError('[PBLAPI.js] ID in options object must be a string');
+	    if (!options.key) throw new TypeError('[PBLAPI.js] The PBL Token of the bot is missing');
+		if (typeof options.key !== 'string') throw new TypeError('[PBLAPI.js] Bot token in options object must be a string');
+		this._baseURL = 'https://pbl.glitch.me/api';
+		this._key = options.key;
+		this._id = options.id;
+	    }
+
+   get id() {
+		 return this._id;
+	 }
+   get key() {
+		 return this._key;
+	 }
+   get baseURL() {
+		 return this._baseURL;
+	 }
+	
+	/**
+   *
+   * @see https://pbl.glitch.me/api/docs/#getBot
+   * @example &lt;caption>Getting a bot from PBL&lt;/caption>
+   * PBL.getBot('some ID') //if you don't add IDit will take as default provided in preparing the client
+   *  .then(res => console.log(res.data))
+   *  .catch(err => console.log(err));
+   *
+	 * Fetches a bot from site
+	 * @param {String} id The ID of the bot
+	 * @returns {Promise&lt;{}>} 
+	 */
+    
+	getBot(id, baseURL = this.baseURL) {
+		if(!id) id = this.id;
+
+		return new Promise((resolve, reject) => {
+		try {
+			axios({
+			url: `${baseURL}/bot/${id}`
+			})
+  		.then(res => {
+			resolve(res.data);
+		});
+		} catch(e) {
+			 reject(new Error(e));
+		}
+	});
+		};
+ 
+	/**
+   *
+   * @see https://pbl.glitch.me/api/docs/#getUser
+   * @example &lt;caption>Getting a user from PBL&lt;/caption>
+   * PBL.getUser('some ID') 
+   *  .then(res => console.log(res.data))
+   *  .catch(err => console.log(err));
+   *
+	 * @param {String} id The ID of the user
+	 * @returns {Promise&lt;{}>} 
+	 */
+
+
+	getUser(id, baseURL = this.baseURL) {
+ 	    if(!id) throw new TypeError('[PBLAPI.js] The user ID is missing');
+
+ 		return new Promise((resolve, reject) => {
+ 		try {
+ 		axios({
+		url: `${baseURL}/user/${id}`
+		})
+ 		.then(res => {
+ 			resolve(res.data);
+ 		});
+ 		} catch(e) {
+ 			 reject(new Error(e));
+ 		}
+ 	});
+ 		};
+	
+		 /**
+		  * 
+      * @see https://pbl.glitch.me/api/docs/#postStats
+      * @example &lt;caption>Posting bot stats to pbl&lt;/caption>
+      * PBL.postStats(44) //must be a number
+      *  .then(res => console.log(res.data))
+      *  .catch(err => console.log(err));
+      *
+		  * @param {Number} count The server count of the bot
+		  * @returns {Promise&lt;{}>} 
+		  */
+
+
+		postStats(count, id = this.id, baseURL = this.baseURL) {
+			if(!count) throw new TypeError('[PBLAPI.js] Please enter server count in numbers')
+			if (typeof count !== 'number') throw new TypeError('[PBLAPI.js] Server count is not a number');
+
+			return  new Promise((resolve, reject) => {
+            try {
+              axios({
+			        method: "POST",
+			        url: `${baseURL}/stats/${id}`,
+			        headers: {
+				            'Content-Type': 'application/json',
+				             'Authorization': this.key
+			        },
+			        data: {
+                    'server_count': count
+		            }})
+			        .then(res => resolve(res));
+                    } catch (e) {
+                    reject(new Error(e));
+                    }
+			        });
+		}
+	 }
+
+module.exports = Client;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sun Apr 12 2020 14:16:52 GMT+0000 (Coordinated Universal Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+        </p>
+    </div>
+</footer>
+
+
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
