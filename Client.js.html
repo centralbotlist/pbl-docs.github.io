@@ -65,10 +65,10 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const axios = require('axios').default;
-const isObject = (obj) => !Array.isArray(obj) &amp;&amp; obj === Object(obj);
+const isObject = (obj) => !Array.isArray(obj) && obj === Object(obj);
 /**
- * @see https://pbl.glitch.me/api/docs
- * @example &lt;caption>Preparing the client&lt;/caption>
+ * @see https://tcbl.glitch.me/api/docs
+ * @example <caption>Preparing the client</caption>
  * const pbl = require('pblapi.js');
  * const PBL = new pbl.Client({ id: 'your bot id', key: 'your bot's pbl token })
  * 
@@ -83,13 +83,12 @@ class Client {
 		if (!isObject(options)) throw new TypeError('[PBLAPI.js] Options must be an object');
 		if(!options.id) throw new TypeError('[PBLAPI.js] The bot ID is missing');
 		if (typeof options.id !== 'string') throw new TypeError('[PBLAPI.js] ID in options object must be a string');
-	    if (!options.key) throw new TypeError('[PBLAPI.js] The PBL Token of the bot is missing');
+	        if (!options.key) throw new TypeError('[PBLAPI.js] The PBL Token of the bot is missing');
 		if (typeof options.key !== 'string') throw new TypeError('[PBLAPI.js] Bot token in options object must be a string');
-		this._baseURL = 'https://pbl.glitch.me/api';
+		this._baseURL = 'https://tcbl.glitch.me/api';
 		this._key = options.key;
 		this._id = options.id;
 	    }
-
    get id() {
 		 return this._id;
 	 }
@@ -102,20 +101,19 @@ class Client {
 	
 	/**
    *
-   * @see https://pbl.glitch.me/api/docs/#getBot
-   * @example &lt;caption>Getting a bot from PBL&lt;/caption>
+   * @see https://tcbl.glitch.me/api/docs/#getBot
+   * @example <caption>Getting a bot from PBL</caption>
    * PBL.getBot('some ID') //if you don't add IDit will take as default provided in preparing the client
    *  .then(res => console.log(res.data))
    *  .catch(err => console.log(err));
    *
 	 * Fetches a bot from site
 	 * @param {String} id The ID of the bot
-	 * @returns {Promise&lt;{}>} 
+	 * @returns {Promise<{}>} 
 	 */
     
 	getBot(id, baseURL = this.baseURL) {
 		if(!id) id = this.id;
-
 		return new Promise((resolve, reject) => {
 		try {
 			axios({
@@ -132,20 +130,17 @@ class Client {
  
 	/**
    *
-   * @see https://pbl.glitch.me/api/docs/#getUser
-   * @example &lt;caption>Getting a user from PBL&lt;/caption>
+   * @see https://tcbl.glitch.me/api/docs/#getUser
+   * @example <caption>Getting a user from PBL</caption>
    * PBL.getUser('some ID') 
    *  .then(res => console.log(res.data))
    *  .catch(err => console.log(err));
    *
 	 * @param {String} id The ID of the user
-	 * @returns {Promise&lt;{}>} 
+	 * @returns {Promise<{}>} 
 	 */
-
-
 	getUser(id, baseURL = this.baseURL) {
  	    if(!id) throw new TypeError('[PBLAPI.js] The user ID is missing');
-
  		return new Promise((resolve, reject) => {
  		try {
  		axios({
@@ -162,21 +157,18 @@ class Client {
 	
 		 /**
 		  * 
-      * @see https://pbl.glitch.me/api/docs/#postStats
-      * @example &lt;caption>Posting bot stats to pbl&lt;/caption>
+      * @see https://tcbl.glitch.me/api/docs/#postStats
+      * @example <caption>Posting bot stats to pbl</caption>
       * PBL.postStats(44) //must be a number
       *  .then(res => console.log(res.data))
       *  .catch(err => console.log(err));
       *
 		  * @param {Number} count The server count of the bot
-		  * @returns {Promise&lt;{}>} 
+		  * @returns {Promise<{}>} 
 		  */
-
-
 		postStats(count, id = this.id, baseURL = this.baseURL) {
 			if(!count) throw new TypeError('[PBLAPI.js] Please enter server count in numbers')
 			if (typeof count !== 'number') throw new TypeError('[PBLAPI.js] Server count is not a number');
-
 			return  new Promise((resolve, reject) => {
             try {
               axios({
@@ -196,7 +188,6 @@ class Client {
 			        });
 		}
 	 }
-
 module.exports = Client;
 </code></pre>
         </article>
